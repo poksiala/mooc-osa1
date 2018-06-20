@@ -16,9 +16,9 @@ const Osa = (props) => {
 const Sisalto = (props) => {
   return (
     <div>
-      <Osa o={props.o1} t={props.t1} />
-      <Osa o={props.o2} t={props.t2} />
-      <Osa o={props.o3} t={props.t3} />
+      <Osa o={props.osa1.nimi}  t={props.osa1.tehtavia} />
+      <Osa o={props.osa2.nimi}  t={props.osa2.tehtavia} />
+      <Osa o={props.osa3.nimi}  t={props.osa3.tehtavia} />
     </div>
   )
 }
@@ -31,18 +31,24 @@ const Yhteensa = (props) => {
 
 const App = () => {
   const kurssi = 'Half Stack -sovelluskehitys'
-  const osa1 = 'Reactin perusteet'
-  const tehtavia1 = 10
-  const osa2 = 'Tiedonvälitys propseilla'
-  const tehtavia2 = 7
-  const osa3 = 'Komponenttien tila'
-  const tehtavia3 = 14
+   const osa1 = {
+    nimi: 'Reactin perusteet',
+    tehtavia: 10
+  }
+  const osa2 = {
+    nimi: 'Tiedonvälitys propseilla',
+    tehtavia: 7
+  }
+  const osa3 = {
+    nimi: 'Komponenttien tila',
+    tehtavia: 14
+  }
 
   return (
     <div>
       <Otsikko kurssi={kurssi} />
-      <Sisalto o1={osa1} t1={tehtavia1} o2={osa2} t2={tehtavia2} o3={osa3} t3={tehtavia3} />
-      <Yhteensa tot={tehtavia1 + tehtavia2 + tehtavia3} />
+      <Sisalto osa1={osa1} osa2={osa2}  osa3={osa3} />
+      <Yhteensa tot={osa1.tehtavia + osa2.tehtavia + osa3.tehtavia} />
     </div>
   )
 }
