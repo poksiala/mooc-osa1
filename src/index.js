@@ -23,7 +23,7 @@ const Sisalto = (props) => {
 
 const Statistic = ({text, number}) => {
   return (
-    <p> {text} {number} </p>
+    <tr><td> {text}</td><td>{number}</td></tr>
   )
 }
 
@@ -39,13 +39,15 @@ const Statistics = ({stats}) => {
 
   return (
     
-    <div>
+    <table>
+      <tbody>
       <Statistic text="hyvä" number={good} />
       <Statistic text="neutraali" number={neutral} />
       <Statistic text="huono" number={bad} />
       <Statistic text="keskiarvo" number={average} />
       <Statistic text="positiivisia" number={`${positivePercent}%`} />
-     </div>
+      </tbody>
+     </table>
   )
 }
 
@@ -62,7 +64,7 @@ class FeedbackButtons extends React.Component {
     return (
       <div>
         {this.state.vals.map((val) => 
-          <button onClick={this.props.func(val.value)}>{val.label}</button>
+          <button key={val.label} onClick={this.props.func(val.value)}>{val.label}</button>
         )}
       </div>
     )
