@@ -1,11 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+const VoteDisplay = (props) => <div>has {props.votes == null ? 0 : props.votes} votes </div>
+
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       selected: 0,
+      points: {},
     }
   }
 
@@ -16,6 +19,13 @@ class App extends React.Component {
 
   selectNew = () => this.setState({selected: this.newIndex()})
 
+  addVote = () => {
+    const pointsCopy = {...this.state.points}
+    if (pointsCopy[this.state.selected] == null) pointsCopy[this.state.selected] = 0
+    pointsCopy[this.state.selected] += 1
+    this.setState({points: pointsCopy})
+  }
+
   render() {
     return (
       <div>
@@ -23,6 +33,10 @@ class App extends React.Component {
           {this.props.anecdotes[this.state.selected]}
         </div>
         <div>
+          <VoteDisplay votes={this.state.points[this.state.selected]} />
+        </div>
+        <div>
+          <button onClick={this.addVote}>vote</button>
           <button onClick={this.selectNew}>next anecdote</button>
         </div>
       </div>
