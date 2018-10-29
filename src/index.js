@@ -1,133 +1,45 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-const Otsikko = ({text}) => {
-  return (
-    <h1>{text}</h1>
-  )
-}
-
-const Osa = ({osa}) => {
-  return (
-    <p>{osa.nimi} {osa.tehtavia}</p>
-  )
-}
-
-const Sisalto = (props) => {
-  return (
-    <div>
-      {props.osat.map((osa) => <Osa osa={osa} />)} 
-    </div>
-  )
-}
-
-const Statistic = ({text, number}) => {
-  return (
-    <tr><td> {text}</td><td>{number}</td></tr>
-  )
-}
-
-const Statistics = ({stats}) => {
-  const {good, neutral, bad} = stats
-
-  const average = (good + neutral + bad) !== 0 ?
-    Math.round(((good - bad) / (good + neutral + bad)) * 10) / 10 : 0
-  
-
-  const positivePercent = (good + neutral + bad) !== 0 ?
-     Math.round(good * 1000 / (good + neutral + bad)) /10 : 0
-
-  return (
-    
-    <table>
-      <tbody>
-      <Statistic text="hyvä" number={good} />
-      <Statistic text="neutraali" number={neutral} />
-      <Statistic text="huono" number={bad} />
-      <Statistic text="keskiarvo" number={average} />
-      <Statistic text="positiivisia" number={`${positivePercent}%`} />
-      </tbody>
-     </table>
-  )
-}
-
-class FeedbackButtons extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state =  {
-      vals: props.vals,
-      func: props.func
-    }
-  }
-  render() {
-    return (
-      <div>
-        {this.state.vals.map((val) => 
-          <button key={val.label} onClick={this.props.func(val.value)}>{val.label}</button>
-        )}
-      </div>
-    )
-  }
-}
-
-class App extends React.Component  {
+class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      stats: {
-        good: 0,
-        neutral: 0,
-        bad: 0
-      } 
-    }
-  };
-  
-  handleClick = (value) => {
-    return () => {
-      this.setState((prevState) => ({
-        stats: {
-          good: prevState.stats.good + ((value === 1) ? 1 : 0),
-          neutral: prevState.stats.neutral + ((value === 0) ? 1 : 0),
-          bad: prevState.stats.bad + ((value === -1) ? 1 : 0)
-        }
-      }))
+      selected: 0,
     }
   }
 
-  render () {
-    
-    const buttonVals = [
-      {
-        label: 'hyvä',
-        value: 1,
-        func: this.handleClick(1)
-      }, {
-        label: 'neutraali',
-        value: 0,
-        func: this.handleClick(0)
-      }, {
-        label: 'huono',
-        value: -1,
-        func: this.handleClick(-1)
-      }
-    ]
+  newIndex = () => {
+    const rndInt = Math.floor(Math.random() * (this.props.anecdotes.length))
+    return rndInt !== this.state.selected ? rndInt : this.newIndex()
+  }
 
-    const statistiikka = (this.state.stats.good + this.state.stats.neutral + this.state.stats.bad !== 0) ?
-      <Statistics stats={this.state.stats} /> : <p> ei yhtään palautetta annettu </p>
+  selectNew = () => this.setState({selected: this.newIndex()})
 
+  render() {
     return (
       <div>
-        <Otsikko text="anna palautetta" />
-        <FeedbackButtons vals={buttonVals} func={this.handleClick} /> 
-        <Otsikko text="statistiikka" />
-        {statistiikka}
+        <div>
+          {this.props.anecdotes[this.state.selected]}
+        </div>
+        <div>
+          <button onClick={this.selectNew}>next anecdote</button>
+        </div>
       </div>
     )
   }
 }
 
+const anecdotes = [
+  'If it hurts, do it more often',
+  'Adding manpower to a late software project makes it later!',
+  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+  'Premature optimization is the root of all evil.',
+  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
+]
+
 ReactDOM.render(
-  <App />,
+  <App anecdotes={anecdotes} />,
   document.getElementById('root')
 )
