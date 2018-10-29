@@ -30,14 +30,15 @@ const Statistic = ({text, number}) => {
 const Statistics = ({stats}) => {
   const {good, neutral, bad} = stats
 
-  const average = (good + neutral + bad) != 0 ?
+  const average = (good + neutral + bad) !== 0 ?
     Math.round(((good - bad) / (good + neutral + bad)) * 10) / 10 : 0
   
 
-  const positivePercent = (good + neutral + bad) != 0 ?
+  const positivePercent = (good + neutral + bad) !== 0 ?
      Math.round(good * 1000 / (good + neutral + bad)) /10 : 0
 
   return (
+    
     <div>
       <Statistic text="hyvä" number={good} />
       <Statistic text="neutraali" number={neutral} />
@@ -110,12 +111,15 @@ class App extends React.Component  {
       }
     ]
 
+    const statistiikka = (this.state.stats.good + this.state.stats.neutral + this.state.stats.bad !== 0) ?
+      <Statistics stats={this.state.stats} /> : <p> ei yhtään palautetta annettu </p>
+
     return (
       <div>
         <Otsikko text="anna palautetta" />
         <FeedbackButtons vals={buttonVals} func={this.handleClick} /> 
         <Otsikko text="statistiikka" />
-        <Statistics stats={this.state.stats} />
+        {statistiikka}
       </div>
     )
   }
