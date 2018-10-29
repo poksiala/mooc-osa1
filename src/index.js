@@ -21,7 +21,7 @@ const Sisalto = (props) => {
   )
 }
 
-const StatisticsLine = ({text, number}) => {
+const Statistic = ({text, number}) => {
   return (
     <p> {text} {number} </p>
   )
@@ -30,11 +30,20 @@ const StatisticsLine = ({text, number}) => {
 const Statistics = ({stats}) => {
   const {good, neutral, bad} = stats
 
+  const average = (good + neutral + bad) != 0 ?
+    Math.round(((good - bad) / (good + neutral + bad)) * 10) / 10 : 0
+  
+
+  const positivePercent = (good + neutral + bad) != 0 ?
+     Math.round(good * 1000 / (good + neutral + bad)) /10 : 0
+
   return (
     <div>
-      <StatisticsLine text="hyvä" number={good} />
-      <StatisticsLine text="neutraali" number={neutral} />
-      <StatisticsLine text="huono" number={bad} />
+      <Statistic text="hyvä" number={good} />
+      <Statistic text="neutraali" number={neutral} />
+      <Statistic text="huono" number={bad} />
+      <Statistic text="keskiarvo" number={average} />
+      <Statistic text="positiivisia" number={`${positivePercent}%`} />
      </div>
   )
 }
