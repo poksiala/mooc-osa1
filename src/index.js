@@ -8,7 +8,7 @@ class App extends React.Component {
     super(props)
     this.state = {
       selected: 0,
-      points: {},
+      points: {0: 0},
     }
   }
 
@@ -26,7 +26,17 @@ class App extends React.Component {
     this.setState({points: pointsCopy})
   }
 
+  getMostVoted = () => {
+    if (this.state.points.size === 0) return {anecdote: this.props.anecdotes[0], votes: 0}
+    var key = 0
+    for (var k in this.state.points) {
+      if (this.state.points[k] > this.state.points[key]) key = k
+    }
+    return {anecdote: this.props.anecdotes[key], votes: this.state.points[key]}
+  }
+
   render() {
+    const best = this.getMostVoted()
     return (
       <div>
         <div>
@@ -39,6 +49,9 @@ class App extends React.Component {
           <button onClick={this.addVote}>vote</button>
           <button onClick={this.selectNew}>next anecdote</button>
         </div>
+        <h1> anecdote with most votes: </h1>
+        <div>{best.anecdote}</div>
+        <VoteDisplay votes={best.votes} />
       </div>
     )
   }
